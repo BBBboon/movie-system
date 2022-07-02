@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                批量上传
+            </div>
+
+            <div class="panel-body">
+                {# 上传文件必须使用post，enctype="multipart/form-data"是指上传文件内容 #}
+                <form method="post" enctype="multipart/form-data" action="/movies/add/multi/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="file" name="exc">
+                    </div>
+                    <input type="submit" value="上传" class="btn btn-info btn-sm">
+                </form>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

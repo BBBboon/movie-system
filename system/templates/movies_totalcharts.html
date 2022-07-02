@@ -1,0 +1,505 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <script src="{% static  'js/echarts.js' %}"></script>
+
+    <title>爱电影彼影评</title>
+    <meta content="这是电影与影评网站的主页，这里提供给用户非凡的体验享受。" name="descriptison"> <!-- 页面描述 -->
+    <meta content="热门电影 用户影评" name="keywords"> <!-- 页面关键词 -->
+
+    <!-- Favicons -->
+    <link href="/static/img/favicon.png" rel="icon">
+    <link href="/static/img/apple-touch-icon.png" rel="apple-touch-icon"> <!--apple-touch-icon图片自动处理成圆角和高光等效果-->
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i,900"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/vendor/icofont/icofont.min.css" rel="stylesheet">
+    <link href="/static/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/static/vendor/animate.css/animate.min.css" rel="stylesheet">
+    <link href="/static/vendor/venobox/venobox.css" rel="stylesheet">
+    <link href="/static/vendor/aos/aos.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1-dist/css/bootstrap.min.css' %}">
+</head>
+
+<body>
+
+<!-- ======= Top Bar ======= -->
+<section id="topbar" class="d-none d-lg-block">
+    <div class="container clearfix">
+        <div class="contact-info float-left">
+            更多优秀的其他电影网站
+            <i class="icofont-hand-drawn-right"></i>
+            <i class="icofont-hand-drawn-right"></i>
+        </div>
+        <div class="social-links float-right">
+            <a href="https://movie.douban.com/" class="douban_movie"><i class="icofont-movie"></i></a>
+            <a href="https://www.warnerbros.com/" class="warnerbros"><i class="icofont-brand-warnerbros"></i></a>
+            <a href="https://www.netflix.com/" class="netflix"><i class="icofont-brand-netflix"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- ======= Header ======= -->
+<header id="header">
+    <div class="container">
+
+        <div class="logo float-left">
+            <h1 class="text-light"><a href="/user/index/"><i class="icofont-ui-video"><span>爱电影彼影评</span></i></a></h1>
+        </div>
+
+        <nav class="nav-menu float-right d-none d-lg-block">
+            <ul>
+                <li><a href="/home/">主页</a></li>
+                <li class="active"><a href="#pie">经典电影饼状图</a></li>
+                <li><a href="#wordcloud">热门电影图表</a></li>
+                {% if request.session.info.name != None %}
+                    <li class="drop-down"><a href="">{{ request.session.info.name }}</a>
+                        <ul>
+                            <li><a href="/logout/">退出登录</a></li>
+                        </ul>
+                    </li>
+                {% elif request.session.user_info.name != None %}
+                    <li class="drop-down"><a href="">{{ request.session.user_info.name }}</a>
+                        <ul>
+                            <li><a href="/user/logout/">退出登录</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="drop-down"><a href="">登录/注册</a>
+                        <ul>
+                            <li><a href="/user/login/">用户登录</a></li>
+                            <li><a href="/login/">管理员登录</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav><!-- .nav-menu -->
+
+    </div>
+</header><!-- End Header -->
+
+
+<section id="pie" class="about">
+    <div class="container">
+
+        <div class="row no-gutters"> <!-- no-gutters消除栅格间的间隙 -->
+            <div class="col-lg-12 video-box">
+                <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+                <div id="main" style="width: 100%;height:600px;"></div>
+                <script type="text/javascript">
+                    var chartDom = document.getElementById('main');
+                    var myChart = echarts.init(chartDom);
+                    var option;
+
+                    const colors = ['#70caef', '#6b9ee8', '#7961ec', '#4071e5', '#9A2555'];
+                    const bgColor = '#515156';
+                    const itemStyle = {
+                        star5: {
+                            color: colors[0]
+                        },
+                        star4: {
+                            color: colors[1]
+                        },
+                        star3: {
+                            color: colors[2]
+                        },
+                        star2: {
+                            color: colors[3]
+                        }
+                    };
+                    const data = [
+                        {
+                            name: '中国',
+                            itemStyle: {
+                                color: colors[1]
+                            },
+                            children: [
+                                {
+                                    name: '爱情',
+                                    children: [
+                                        {
+                                            name: '5☆',
+                                            children: [{name: '霸王别姬'}]
+                                        },
+                                        {
+                                            name: '4☆',
+                                            children: [{name: '大话西游之月光宝盒'}]
+                                        },
+                                        {
+                                            name: '3☆',
+                                            children: [{name: '新龙门客栈'}, {name: '色，戒'}, {name: '青蛇'}, {name: '重庆森林'}]
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: '喜剧',
+                                    children: [
+                                        {
+                                            name: '5☆',
+                                            children: [{name: '我不是药神'}]
+                                        },
+                                        {
+                                            name: '4☆',
+                                            children: [{name: '鬼子来了'}, {name: '让子弹飞'}, {name: '大话西游之月光宝盒'}, {name: '唐伯虎点秋香'}]
+                                        },
+                                        {
+                                            name: '3☆',
+                                            children: [{name: '功夫'}]
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: '历史',
+                                    children: [
+                                        {
+                                            name: '5☆',
+                                            children: [{name: '茶馆'}]
+                                        },
+                                        {
+                                            name: '4☆',
+                                            children: [{name: '末代皇帝'}, {name: '活着'}]
+                                        },
+                                        {
+                                            name: '3☆',
+                                            children: [{name: '比起爱你，我更需要你'}]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: '国外',
+                            itemStyle: {
+                                color: colors[2]
+                            },
+                            children: [
+                                {
+                                    name: '爱情',
+                                    children: [
+                                        {
+                                            name: '5☆',
+                                            children: [{name: '泰坦尼克号'}, {name: '阿甘正传'}]
+                                        },
+                                        {
+                                            name: '4☆',
+                                            children: [{name: '怦然心动'}, {name: '本杰明·巴顿奇事'}, {name: '罗马假日'}]
+                                        },
+                                        {
+                                            name: '3☆',
+                                            children: [{name: '你的名字。'}, {name: '爱在黎明破晓前'}, {name: '爱在日落黄昏时'}]
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: '动画',
+                                    children: [
+                                        {
+                                            name: '5☆',
+                                            children: [{name: '千与千寻'}, {name: '机器人总动员'}]
+                                        },
+                                        {
+                                            name: '4☆',
+                                            children: [{name: '疯狂动物城'}, {name: '寻梦环游记'}, {name: '飞屋环游记'}]
+                                        },
+                                        {
+                                            name: '3☆',
+                                            children: [{name: '神偷奶爸'}, {name: '驯龙高手'}, {name: '疯狂原始人'}, {name: '龙猫'}]
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: '心理',
+                                    children: [
+                                        {
+                                            name: '5☆',
+                                            children: [{name: '这个杀手不太冷'}]
+                                        },
+                                        {
+                                            name: '4☆',
+                                            children: [{name: '蝙蝠侠：黑暗骑士'}]
+                                        },
+                                        {
+                                            name: '3☆',
+                                            children: [{name: '釜山行'}, {name: '阿凡达'}, {name: '加勒比海盗'}, {name: '勇敢的心'}]
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: '惊悚',
+                                    children: [
+                                        {
+                                            name: '3☆',
+                                            children: [{name: '小丑'}, {name: '禁闭岛'}, {name: '沉默的羔羊'}, {name: '七宗罪'}]
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: '冒险',
+                                    children: [
+                                        {
+                                            name: '5☆',
+                                            children: [{name: '盗梦空间'}, {name: '星际穿越'}, {name: '哈利·波特与魔法石'}]
+                                        },
+                                        {
+                                            name: '4☆',
+                                            children: [{name: '头号玩家'}, {name: '哈尔的移动城堡'}, {name: '博物学家的神秘动物图鉴'}]
+                                        }
+                                    ]
+                                },
+                                {
+                                    name: '犯罪',
+                                    children: [
+                                        {
+                                            name: '5☆',
+                                            children: [{name: '猫鼠游戏'}, {name: '教父'}]
+                                        },
+                                        {
+                                            name: '4☆',
+                                            children: [{name: '看不见的客人'}, {name: '小偷家族'}]
+                                        }
+                                    ]
+                                },
+                            ]
+                        }
+                    ];
+                    for (let j = 0; j < data.length;
+                         ++j
+                    ) {
+                        let level1 = data[j].children;
+                        for (let i = 0; i < level1.length; ++i) {
+                            let block = level1[i].children;
+                            let bookScore = [];
+                            let bookScoreId;
+                            for (let star = 0; star < block.length; ++star) {
+                                let style = (function (name) {
+                                    switch (name) {
+                                        case '5☆':
+                                            bookScoreId = 0;
+                                            return itemStyle.star5;
+                                        case '4☆':
+                                            bookScoreId = 1;
+                                            return itemStyle.star4;
+                                        case '3☆':
+                                            bookScoreId = 2;
+                                            return itemStyle.star3;
+                                        case '2☆':
+                                            bookScoreId = 3;
+                                            return itemStyle.star2;
+                                    }
+                                })(block[star].name);
+                                block[star].label = {
+                                    color: style.color,
+                                    downplay: {
+                                        opacity: 0.5
+                                    }
+                                };
+                                if (block[star].children) {
+                                    style = {
+                                        opacity: 1,
+                                        color: style.color
+                                    };
+                                    block[star].children.forEach(function (book) {
+                                        book.value = 1;
+                                        book.itemStyle = style;
+                                        book.label = {
+                                            color: style.color
+                                        };
+                                        let value = 1;
+                                        if (bookScoreId === 0 || bookScoreId === 3) {
+                                            value = 5;
+                                        }
+                                        if (bookScore[bookScoreId]) {
+                                            bookScore[bookScoreId].value += value;
+                                        } else {
+                                            bookScore[bookScoreId] = {
+                                                color: colors[bookScoreId],
+                                                value: value
+                                            };
+                                        }
+                                    });
+                                }
+                            }
+                            level1[i].itemStyle = {
+                                color: data[j].itemStyle.color
+                            };
+                        }
+                    }
+                    option = {
+                        backgroundColor: bgColor,
+                        color: colors,
+                        series: [
+                            {
+                                type: 'sunburst',
+                                center: ['50%', '48%'],
+                                data: data,
+                                sort: function (a, b) {
+                                    if (a.depth === 1) {
+                                        return b.getValue() - a.getValue();
+                                    } else {
+                                        return a.dataIndex - b.dataIndex;
+                                    }
+                                },
+                                label: {
+                                    rotate: 'radial',
+                                    color: bgColor
+                                },
+                                itemStyle: {
+                                    borderColor: bgColor,
+                                    borderWidth: 2
+                                },
+                                levels: [
+                                    {},
+                                    {
+                                        r0: 0,
+                                        r: 40,
+                                        label: {
+                                            rotate: 0
+                                        }
+                                    },
+                                    {
+                                        r0: 40,
+                                        r: 105
+                                    },
+                                    {
+                                        r0: 115,
+                                        r: 140,
+                                        itemStyle: {
+                                            shadowBlur: 2,
+                                            shadowColor: colors[2],
+                                            color: 'transparent'
+                                        },
+                                        label: {
+                                            rotate: 'tangential',
+                                            fontSize: 10,
+                                            color: colors[0]
+                                        }
+                                    },
+                                    {
+                                        r0: 140,
+                                        r: 145,
+                                        itemStyle: {
+                                            shadowBlur: 80,
+                                            shadowColor: colors[0]
+                                        },
+                                        label: {
+                                            position: 'outside',
+                                            textShadowBlur: 5,
+                                            textShadowColor: '#333'
+                                        },
+                                        downplay: {
+                                            label: {
+                                                opacity: 0.5
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    };
+
+                    option && myChart.setOption(option);
+                </script>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section id="wordcloud" class="about">
+    <div class="container">
+            <div class="col-lg-6 video-box" data-aos="fade-up" data-aos-delay="100">
+                <img src="/static/img/movie_word.png" class="img-fluid" alt="" style="height: 600px; width: 800px">
+            </div>
+
+            <div class="col-lg-6 d-flex flex-column justify-content-center about-content">
+
+                <div class="section-title">
+                    <h2>热门电影图表</h2>
+                    <p style="text-align:center">
+                        左边的电影词云图是由本系统的所有电影名生成，出现次数越多越受欢迎的电影在词云中的字体会越大。通过本系统的分析，
+                        可以看出很多用户喜欢<strong>蝙蝠侠，哈利波特这类奇幻、科幻和冒险类</strong>,
+                        还有很多用户会喜欢<strong>小森林这种治愈类</strong>，
+                        当然，还有很多用户更倾向于选择<strong>肖申克的救赎、霸王别姬、阿甘正传等这类经典电影</strong>。
+                        您也可以跟据系统提供的电影词云图自行分析用户的电影喜好，找到和自己喜爱电影类型相似的电影进行观看。
+                    </p>
+                </div>
+
+                <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon"><i class="bx bx-fingerprint"></i></div>
+                    <h4 class="title"><a href="/movies/charts/">电影统计图</a></h4>
+                    <p class="description">在这里你可以看到耳熟能详的经典电影，并根据喜欢查看电影的图表信息 :)</p>
+                </div>
+
+                <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon"><i class="bx bx-gift"></i></div>
+                    <h4 class="title"><a href="/movies/info/">电影详细信息</a></h4>
+                    <p class="description">在这里你可以先看电影的详细信息，再做下一步选择。</p>
+                </div>
+
+                <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon"><i class="bx bxs-comment-dots"></i></div>
+                    <h4 class="title"><a href="/movies/comments/">电影评论</a></h4>
+                    <p class="description">在这里你可以找到经典电影的用户评论，看看其他用户和你的见解是否一样。</p>
+                </div>
+
+            </div>
+    </div>
+
+    </div>
+</section>
+
+
+<footer id="footer">
+    <div class="footer-top">
+        <h2 align="center" style="font-family: Gabriola">Lucky Boon:</h2>
+        <p align="center">每次我坐在电影院里，看到这么多不同的人处于同一个时空，为同一个故事、同一种情感或笑或哭或骂，都觉得不可思议。</p>
+    </div>
+
+    <div class="container">
+        {#      <div class="copyright">#}
+        {#        &copy; Copyright <strong><span>Mamba</span></strong>. All Rights Reserved#}
+        {#      </div>#}
+        <div class="copyright">
+            联系我 <strong><span>Lucky_Boon</span></strong> 如有任何问题
+        </div>
+        <div class="credits">
+            <i class="icofont-envelope"></i><a href="https://mail.qq.com/">1632691127@qq.com</a>
+            {#        <i class="icofont-phone"></i> +1 5589 55488 55#}
+        </div>
+    </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="/static/vendor/jquery/jquery.min.js"></script>
+<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/vendor/jquery.easing/jquery.easing.min.js"></script>
+<script src="/static/vendor/php-email-form/validate.js"></script>
+<script src="/static/vendor/jquery-sticky/jquery.sticky.js"></script>
+<script src="/static/vendor/venobox/venobox.min.js"></script>
+<script src="/static/vendor/waypoints/jquery.waypoints.min.js"></script>
+<script src="/static/vendor/counterup/counterup.min.js"></script>
+<script src="/static/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/static/vendor/aos/aos.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/static/js/main.js"></script>
+
+</body>
+
+</html>

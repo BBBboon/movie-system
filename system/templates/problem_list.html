@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+
+        <div style="margin-bottom: 10px">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                    用户问题列表
+                </div>
+
+                <!-- Table -->
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>用户</th>
+                        <th>上传时间</th>
+                        <th>问题描述</th>
+                        <th>问题截图</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for obj in queryset %}
+                        <tr>
+                            <td>{{ obj.id }}</td>
+                            <td>{{ obj.user.name }}</td>
+                            <td>{{ obj.upload_time }}</td>
+                            <td>{{ obj.problem }}</td>
+                            <td>
+                                <img src="/media/{{ obj.img }}" style="height: 60px">
+                            </td>
+                            <td>
+                                <a class="btn btn-success" href="/problem/{{ obj.id }}/delete/">已解决</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

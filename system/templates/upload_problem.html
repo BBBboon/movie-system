@@ -1,0 +1,29 @@
+{% extends 'index_layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ title }}</h3>
+            </div>
+            <div class="panel-body">
+
+                {#                表单#}
+                <form method="post" enctype="multipart/form-data" novalidate> {#novalidate去除浏览器的校验信息#}
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label>{{ field.label }}</label>
+                            {{ field }}
+                            <span style="color: red">{{ field.errors.0 }}</span> {#显示错误信息#}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

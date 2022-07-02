@@ -1,0 +1,77 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px" class="clearfix">
+            <a class="btn btn-success" href="/admin/movie/add/">
+                <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+                添加电影
+            </a>
+            <a class="btn btn-info" href="/movies/add/multi/">
+                <span class="glyphicon glyphicon-cloud-upload" aria-hidden="true"></span>
+                批量上传
+            </a>
+            <div style="float: right; width: 300px;">
+                <form method="get">
+                    <div class="input-group"> <!--设置搜索框-->
+                        <!-- form-control:为输入框添加css样式 -->
+                        <input type="text" name="q" class="form-control" placeholder="搜索电影名" value="{{ search_data }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                电影列表
+            </div>
+
+            <!-- Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>影名</th>
+                    <th>外国名</th>
+                    <th>评分</th>
+                    <th>参评人数</th>
+                    <th>简介</th>
+                    <th>电影信息</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <th>{{ obj.id }}</th>
+                        <td>{{ obj.cname }}</td>
+                        <td>{{ obj.ename }}</td>
+                        <td>{{ obj.score }}</td>
+                        <td>{{ obj.rated }}</td>
+                        <td>{{ obj.introduction }}</td>
+                        <td>{{ obj.info }}</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm" href="/admin/movie/{{ obj.id }}/edit/"
+                               style="margin-bottom:5px">编辑</a>
+                            <a class="btn btn-danger btn-sm" href="/admin/movie/{{ obj.id }}/delete/">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="clearfix">
+            <ul class="pagination">
+                {{ page_string }}
+            </ul>
+        </div>
+
+    </div>
+{% endblock %}

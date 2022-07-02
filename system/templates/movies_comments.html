@@ -1,0 +1,79 @@
+{% extends 'index_layout.html' %}
+
+{% block search %}
+    <div style="float: right; width: 300px;">
+                <form method="get">
+                    <div class="input-group"> <!--设置搜索框-->
+                        <!-- form-control:为输入框添加css样式 -->
+                        <input type="text" name="q" class="form-control" placeholder="请输入您想看的电影" value="{{ search_data }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+{% endblock %}
+
+{% block content %}
+    <section id="wordcloud" class="about">
+        <div class="container">
+
+            <div class="row no-gutters"> <!-- no-gutters消除栅格间的间隙 -->
+                <div class="col-lg-6 video-box">
+                    <img src="/static/img/i_word.jpg" class="img-fluid" alt="电影词云">
+                </div>
+
+                <div class="col-lg-6 d-flex flex-column justify-content-center about-content">
+
+                    <div class="section-title">
+                        <h2>经典电影词云</h2>
+                        <p style="text-align:center">
+                            左面的词云图由系统的全部电影简介生成，词语出现的次数越多字体会变得越大。经过系统的分析可以得出，
+                            <strong>{{ conclusion }}</strong>
+                            在这里将经典电影的简介通过词云的形式展现给您，您也自己发现经典电影间的共同点，发掘人们和电影间的共鸣。
+                        </p>
+                    </div>
+
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                        <div class="icon"><i class="bx bxs-film"></i></div>
+                        <h4 class="title"><a href="/movies/info/">经典电影信息</a></h4>
+                        <p class="description">在这里你可以看到耳熟能详的经典电影，并根据喜欢查看这些经典电影的内容 :)</p>
+                    </div>
+
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                        <div class="icon"><i class="icofont-chart-growth"></i></div>
+                        <h4 class="title"><a href="/movies/totalcharts/">电影图表</a></h4>
+                        <p class="description">在这里你可以看到经典电影的数据通过图表的形式展示出来，便于一目了然地全面了解喜欢的电影。</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="comments" class="about-lists">
+        <div class="container">
+
+            <div class="row no-gutters">
+                {% for movie in queryset %}
+                    <!--fade-up: 淡入--> <!--data-aos-delay: 动画的延迟时间-->
+                    <div class="col-lg-4 col-md-6 content-item" data-aos="fade-up" data-aos-delay="{{ movie.id }}*100">
+                        <span>{{ movie.id }}</span>
+                        <img src="{{ movie.pic_link }}" class="img-fluid" alt="电影海报">
+                        <a href="/movie/{{ movie.id }}/comments/"><h4>{{ movie.cname }}</h4></a>
+                        <p>{{ movie.introduction }}</p>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+    </section>
+    <!--分页 -->
+    <ul class="pagination" style=" left: 30%; position: relative">
+        {{ page_string }}
+    </ul>
+{% endblock %}

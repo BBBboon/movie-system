@@ -1,0 +1,66 @@
+{% extends 'index_layout.html' %}
+{% block header %}
+    <h4>这是第{{ row_object.id }}部经典电影<i class="icofont-badge"></i></h4>
+{% endblock %}
+
+{% block content %}
+    <section id="about" class="about">
+        <div class="container">
+
+            <div class="row no-gutters"> <!-- no-gutters消除栅格间的间隙 -->
+                <div class="col-lg-4 video-box">
+                    <img src="{{ row_object.pic_link }}" style="left: 20%; top: 5%; position: absolute" class="img-fluid" alt="电影海报">
+{#                    <img src="/static/img/about.jpg" class="img-fluid" alt="">#}
+{#                    <a href="https://www.youtube.com/watch?v=jDDaplaOz7Q" class="venobox play-btn mb-4"#}
+{#                       data-vbtype="video" data-autoplay="true"></a>#}
+                </div>
+                <!--
+                    d-flex:创建一个弹性盒子容器
+                    flex-column:设置弹性子元素垂直方向显示
+                    justify-content-center:将弹性子元素置于中央
+                -->
+                <div class="col-lg-8 d-flex flex-column justify-content-center about-content">
+
+                    <div class="section-title">
+                        <h2>
+                            {{ row_object.cname }}
+                            {% if row_object.ename == NULL %} <!--若没有英文名字则不显示-->
+                                ({{ row_object.ename }})
+                            {% endif %}
+                        </h2>
+                        <p>{{ row_object.info }}</p>
+                    </div>
+
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                        <div class="icon"><i class="bx bxs-video"></i></div>
+{#                        <h4 class="title"><a href="">电影信息</a></h4>#}
+                        <p class="description">
+                            <b>电影简介：</b>{{ row_object.introduction }} <br>
+                            <b>评分：</b>{{ row_object.score }} <br>
+                            大约有<b>{{ row_object.rated }}</b>人参与评价过。
+                        </p>
+                    </div>
+
+
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                        <div class="icon"><i class="bx bxs-comment-detail"></i></div>
+                        <h4 class="title"><a href="/movie/{{ row_object.id }}/comments/">热门影评</a></h4>
+                        <p class="description">
+                            {{ comment_object.comment }}
+                        </p>
+                    </div>
+
+                    <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                        <div class="icon"><i class="bx bx-line-chart"></i></div>
+                        <h4 class="title"><a href="/movie/{{ row_object.id }}/chart/">图表统计</a></h4>
+                        <p class="description">
+                            在这里您可以一目了然得全面了解 {{ row_object.cname }} 。
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section><!-- End About Us Section -->
+{% endblock %}

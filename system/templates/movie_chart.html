@@ -1,0 +1,360 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <script src="{% static  'js/echarts.js' %}"></script>
+
+    <title>爱电影彼影评</title>
+    <meta content="这是电影与影评网站的主页，这里提供给用户非凡的体验享受。" name="descriptison"> <!-- 页面描述 -->
+    <meta content="热门电影 用户影评" name="keywords"> <!-- 页面关键词 -->
+
+    <!-- Favicons -->
+    <link href="/static/img/favicon.png" rel="icon">
+    <link href="/static/img/apple-touch-icon.png" rel="apple-touch-icon"> <!--apple-touch-icon图片自动处理成圆角和高光等效果-->
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i,900"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/vendor/icofont/icofont.min.css" rel="stylesheet">
+    <link href="/static/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/static/vendor/animate.css/animate.min.css" rel="stylesheet">
+    <link href="/static/vendor/venobox/venobox.css" rel="stylesheet">
+    <link href="/static/vendor/aos/aos.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/static/css/style.css" rel="stylesheet">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1-dist/css/bootstrap.min.css' %}">
+</head>
+
+<body>
+
+<!-- ======= Top Bar ======= -->
+<section id="topbar" class="d-none d-lg-block">
+    <div class="container clearfix">
+        <div class="contact-info float-left">
+            更多优秀的其他电影网站
+            <i class="icofont-hand-drawn-right"></i>
+            <i class="icofont-hand-drawn-right"></i>
+        </div>
+        <div class="social-links float-right">
+            <a href="https://movie.douban.com/" class="douban_movie"><i class="icofont-movie"></i></a>
+            <a href="https://www.warnerbros.com/" class="warnerbros"><i class="icofont-brand-warnerbros"></i></a>
+            <a href="https://www.netflix.com/" class="netflix"><i class="icofont-brand-netflix"></i></a>
+        </div>
+    </div>
+</section>
+
+<!-- ======= Header ======= -->
+<header id="header">
+    <div class="container">
+
+        <div class="logo float-left">
+            <h1 class="text-light"><a href="/user/index/"><i class="icofont-ui-video"><span>爱电影彼影评</span></i></a></h1>
+        </div>
+
+        <nav class="nav-menu float-right d-none d-lg-block">
+            <ul>
+                <li><a href="/home/">主页</a></li>
+                <li class="active"><a href="#bar">影评柱状图</a></li>
+                <li><a href="#line">时间折线图</a></li>
+                <li><a href="/movies/comments/">其他电影图表</a></li>
+            </ul>
+        </nav><!-- .nav-menu -->
+
+    </div>
+</header><!-- End Header -->
+
+<!--柱状图模块-->
+<section id="bar" class="about">
+    <div class="container">
+
+        <div class="row no-gutters"> <!-- no-gutters消除栅格间的间隙 -->
+            <div class="col-lg-6 video-box">
+
+                <div id="main1" style="width: 600px;height:500px; "></div>
+                <script type="text/javascript">
+                    var chartDom = document.getElementById('main1');
+                    var myChart = echarts.init(chartDom);
+                    var option1;
+
+                    option1 = {
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        grid: {
+                            left: '3%',
+                            right: '4%',
+                            bottom: '3%',
+                            containLabel: true
+                        },
+                        xAxis: [
+                            {
+                                type: 'category',
+                                data: ['力荐', '推荐', '还行', '较差', '很差'],
+                                axisTick: {
+                                    alignWithLabel: true
+                                }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: 'value'
+                            }
+                        ],
+                        series: [
+                            {
+                                name: 'Direct',
+                                type: 'bar',
+                                barWidth: '60%',
+                                data: [{{ five_star }}, {{ four_star }}, {{ three_star }}, {{ two_star }}, {{ one_star }}]
+                            }
+                        ]
+                    };
+
+                    option1 && myChart.setOption(option1);
+                </script>
+            </div>
+
+            <div class="col-lg-6 d-flex flex-column justify-content-center about-content">
+
+                <div class="section-title">
+                    <h2>{{ movie_set.movie }}</h2>
+                    <p style="text-align:center">{{ movie_set.introduction }}</p>
+                </div>
+
+                <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon"><i class="icofont-chart-bar-graph"></i></div>
+                    <h4 class="title"><a href="#">{{ movie_set.cname }} 的用户评分柱状图</a></h4>
+                    <p class="description">
+                        根据系统的计算与判断，<strong>{{ bar_conclusion }}</strong>
+                        你也可以根据柱状图自行判断这部电影怎么样。
+                        时间人数{{ num }}
+                    </p>
+                </div>
+
+                <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon"><i class="icofont-speech-comments"></i></div>
+                    <h4 class="title"><a href="/movie/{{ movie_set.id }}/comments/">更多影评</a></h4>
+                    <p class="description">你可以点击这里看更多关于 {{ movie_set.cname }} 的影评。</p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!--折线图模块-->
+<section id="line" class="about">
+    <div class="container">
+        <div class="row no-gutters"> <!-- no-gutters消除栅格间的间隙 -->
+            <div class="col-lg-12 video-box">
+                <div id="main2" style="width: 1200px;height:600px;"></div>
+                <script type="text/javascript">
+                    var chartDom = document.getElementById('main2');
+                    var myChart = echarts.init(chartDom);
+                    var option;
+
+                    setTimeout(function () {
+                        option = {
+                            legend: {},
+                            tooltip: {
+                                trigger: 'axis',
+                                showContent: false
+                            },
+                            // 二位数组: list[[1,1], [2,2]] 调用方式为：list.0.0
+                            dataset: {
+                                source: [
+                                    ['star', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014',
+                                        '2015', '2016', '2017', '2018', '2019', '2020', '2021'],
+
+                                    ['力荐', {{ time_chart.0.0 }}, {{ time_chart.1.0 }}, {{ time_chart.2.0 }},
+                                        {{ time_chart.3.0 }}, {{ time_chart.4.0 }}, {{ time_chart.5.0 }},
+                                        {{ time_chart.6.0 }}, {{ time_chart.7.0 }}, {{ time_chart.8.0 }},
+                                        {{ time_chart.9.0 }}, {{ time_chart.10.0 }}, {{ time_chart.11.0 }},
+                                        {{ time_chart.12.0 }}, {{ time_chart.13.0 }}, {{ time_chart.14.0 }},
+                                        {{ time_chart.15.0 }}, {{ time_chart.16.0 }}],
+
+                                    ['推荐', {{ time_chart.0.1 }}, {{ time_chart.1.1 }}, {{ time_chart.2.1 }},
+                                        {{ time_chart.3.1 }}, {{ time_chart.4.1 }}, {{ time_chart.5.1 }},
+                                        {{ time_chart.6.1 }}, {{ time_chart.7.1 }}, {{ time_chart.8.1 }},
+                                        {{ time_chart.9.1 }}, {{ time_chart.10.1 }}, {{ time_chart.11.1 }},
+                                        {{ time_chart.12.1 }}, {{ time_chart.13.1 }}, {{ time_chart.14.1 }},
+                                        {{ time_chart.15.1 }}, {{ time_chart.16.1 }}],
+
+                                    ['还行', {{ time_chart.0.2 }}, {{ time_chart.1.2 }}, {{ time_chart.2.2 }},
+                                        {{ time_chart.3.2 }}, {{ time_chart.4.2 }}, {{ time_chart.5.2 }},
+                                        {{ time_chart.6.2 }}, {{ time_chart.7.2 }}, {{ time_chart.8.2}},
+                                        {{ time_chart.9.2 }}, {{ time_chart.10.2 }}, {{ time_chart.11.2 }},
+                                        {{ time_chart.12.2 }}, {{ time_chart.13.2 }}, {{ time_chart.14.2 }},
+                                        {{ time_chart.15.2 }}, {{ time_chart.16.2 }}],
+
+                                    ['较差', {{ time_chart.0.3 }}, {{ time_chart.1.3 }}, {{ time_chart.2.3 }},
+                                        {{ time_chart.3.3 }}, {{ time_chart.4.3 }}, {{ time_chart.5.3 }},
+                                        {{ time_chart.6.3 }}, {{ time_chart.7.3 }}, {{ time_chart.8.3 }},
+                                        {{ time_chart.9.3 }}, {{ time_chart.10.3 }}, {{ time_chart.11.3 }},
+                                        {{ time_chart.12.3 }}, {{ time_chart.13.3 }}, {{ time_chart.14.3 }},
+                                        {{ time_chart.15.3 }}, {{ time_chart.16.3 }}],
+
+                                    ['很差', {{ time_chart.0.4 }}, {{ time_chart.1.4 }}, {{ time_chart.2.4 }},
+                                        {{ time_chart.3.4 }}, {{ time_chart.4.4 }}, {{ time_chart.5.4 }},
+                                        {{ time_chart.6.4 }}, {{ time_chart.7.4 }}, {{ time_chart.8.4 }},
+                                        {{ time_chart.9.4 }}, {{ time_chart.10.4 }}, {{ time_chart.11.4 }},
+                                        {{ time_chart.12.4 }}, {{ time_chart.13.4 }}, {{ time_chart.14.4 }},
+                                        {{ time_chart.15.4 }}, {{ time_chart.16.4 }}]
+                                ]
+                            },
+                            xAxis: {type: 'category'},
+                            yAxis: {gridIndex: 0},
+                            grid: {top: '55%'},
+                            series: [
+                                {
+                                    type: 'line',
+                                    smooth: true,
+                                    seriesLayoutBy: 'row',
+                                    emphasis: {focus: 'series'}
+                                },
+                                {
+                                    type: 'line',
+                                    smooth: true,
+                                    seriesLayoutBy: 'row',
+                                    emphasis: {focus: 'series'}
+                                },
+                                {
+                                    type: 'line',
+                                    smooth: true,
+                                    seriesLayoutBy: 'row',
+                                    emphasis: {focus: 'series'}
+                                },
+                                {
+                                    type: 'line',
+                                    smooth: true,
+                                    seriesLayoutBy: 'row',
+                                    emphasis: {focus: 'series'}
+                                },
+                                {
+                                    type: 'line',
+                                    smooth: true,
+                                    seriesLayoutBy: 'row',
+                                    emphasis: {focus: 'series'}
+                                },
+                                {
+                                    type: 'pie',
+                                    id: 'pie',
+                                    radius: '30%',
+                                    center: ['50%', '25%'],
+                                    emphasis: {
+                                        focus: 'self'
+                                    },
+                                    label: {
+                                        formatter: '{b}: {@2021} ({d}%)'
+                                    },
+                                    encode: {
+                                        itemName: 'star',
+                                        value: '2021',
+                                        tooltip: '2021'
+                                    }
+                                }
+                            ]
+                        };
+                        myChart.on('updateAxisPointer', function (event) {
+                            const xAxisInfo = event.axesInfo[0];
+                            if (xAxisInfo) {
+                                const dimension = xAxisInfo.value + 1;
+                                myChart.setOption({
+                                    series: {
+                                        id: 'pie',
+                                        label: {
+                                            formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                                        },
+                                        encode: {
+                                            value: dimension,
+                                            tooltip: dimension
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        myChart.setOption(option);
+                    });
+
+                    option && myChart.setOption(option);
+
+                </script>
+            </div>
+
+            <div class="col-lg-12 d-flex flex-column justify-content-center about-content">
+
+                <div class="section-title">
+                    <h2>{{ movie_set.movie }}</h2>
+                    <p style="text-align:center">{{ movie_set.introduction }}</p>
+                </div>
+
+                <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon"><i class="icofont-chart-bar-graph"></i></div>
+                    <h4 class="title"><a href="#">{{ movie_set.cname }} 的时间评级折线图</a></h4>
+                    <p class="description">
+                        根据用户的影评等级和时间年限，系统分析得出<strong>{{ line_conclusion }}</strong>
+                        当然，你也可以根据折线图和饼图来自己分析这部电影是否依旧受人们青睐。
+                    </p>
+                </div>
+
+                <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon"><i class="icofont-speech-comments"></i></div>
+                    <h4 class="title"><a href="/movie/{{ movie_set.id }}/comments/">更多影评</a></h4>
+                    <p class="description">你可以点击这里看更多关于 {{ movie_set.cname }} 的影评。</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer id="footer">
+    <div class="footer-top">
+        <h2 align="center" style="font-family: Gabriola">Lucky Boon:</h2>
+        <p align="center">每次我坐在电影院里，看到这么多不同的人处于同一个时空，为同一个故事、同一种情感或笑或哭或骂，都觉得不可思议。</p>
+    </div>
+
+    <div class="container">
+        <div class="copyright">
+            联系我 <strong><span>Lucky_Boon</span></strong> 如有任何问题
+        </div>
+        <div class="credits">
+            <i class="icofont-envelope"></i><a href="https://mail.qq.com/">1632691127@qq.com</a>
+        </div>
+    </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="/static/vendor/jquery/jquery.min.js"></script>
+<script src="/static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/static/vendor/jquery.easing/jquery.easing.min.js"></script>
+<script src="/static/vendor/php-email-form/validate.js"></script>
+<script src="/static/vendor/jquery-sticky/jquery.sticky.js"></script>
+<script src="/static/vendor/venobox/venobox.min.js"></script>
+<script src="/static/vendor/waypoints/jquery.waypoints.min.js"></script>
+<script src="/static/vendor/counterup/counterup.min.js"></script>
+<script src="/static/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+<script src="/static/vendor/aos/aos.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/static/js/main.js"></script>
+
+</body>
+
+</html>
