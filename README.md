@@ -16,7 +16,7 @@ mathematical model for text sentiment analysis of user movie reviews. The system
 hot movies wordcloud · sentiment analysis · movies information and comments from douban · grouph visualization
 
 ### documents introduction ###
-  `system`: codes(Django) to build movie system.
-  `spider`: codes to crawl movies information from douban
-  `media`: store pictures about system
-  `employee_mgr`: Django’s configuration information
+* `system`: codes(Django) to build movie system.
+* `spider`: codes to crawl movies information from douban
+* `media`: store pictures about system
+* `employee_mgr`: Django’s configuration information
