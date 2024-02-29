@@ -79,7 +79,7 @@ def get_url(basic_url):
 
 # 获取每个电影主页的超链接
 def get_movie_url(basic_content):
-    soup = bs(basic_content, "html.parser")
+    soup = bs(basic_content, "html.parser") #使用 html.parse 解析HTML文档成Unicode文档
     # print(soup)
     movies_urls = []
 
